@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>de.silbury.ucm</groupId>
+        <artifactId>ucm-component-pom</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath></relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <name>Silbury UCM Common</name>
+    <artifactId>silbury-ucm-common</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <!-- github server corresponds to entry in ~/.m2/settings.xml -->
+        <github.global.server>github</github.global.server>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>0.9</version>
+                <configuration>
+                    <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
+                    <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
+                    <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
+                    <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
+                    <includes><include>**/*</include></includes>
+                    <repositoryName>silbury-test</repositoryName>      <!-- github repo name -->
+                    <repositoryOwner>thomasbeauvais</repositoryOwner>    <!-- github username  -->
+                </configuration>
+                <executions>
+                    <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>deploy</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- System -->
+        <!-- Because Oracle is a closed source company and doesn't offer a Maven repo, we have to do this manually -->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc</artifactId>
+            <version>11.2.0.3</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ojdbc/ojdbc6-11.2.0.3.jar</systemPath>
+        </dependency>
+
+        <!-- Test Scope -->
+        <!--
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.3.0</version>
+            <scope>test</scope>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.3.173</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.guess880</groupId>
+            <artifactId>h2-oracle-funcs</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>2.4.9</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.20</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <!--<version>1.7.5</version>-->
+            <version>1.5.6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>2.0.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Runtime -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.ucm</groupId>
+            <artifactId>ridc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.ucm</groupId>
+            <artifactId>idcserver</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.silbury</groupId>
+            <artifactId>ucm-maven-integration</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.github</groupId>
+            <artifactId>site-maven-plugin</artifactId>
+            <version>0.9</version>
+        </dependency>
+    </dependencies>
+    <distributionManagement>
+        <repository>
+            <id>internal.repo</id>
+            <name>Temporary Staging Repository</name>
+            <url>file://${project.build.directory}/mvn-repo</url>
+        </repository>
+    </distributionManagement>
+</project>
